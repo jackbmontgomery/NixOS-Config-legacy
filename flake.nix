@@ -38,6 +38,7 @@
       };
     };
   };
+
   outputs = inputs @ {
     self,
     nixpkgs,
@@ -46,46 +47,53 @@
     nvf,
     zen-browser,
     ...
-  }: {
-    nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./hosts/thinkpad/default.nix
-        stylix.nixosModules.stylix
-        home-manager.nixosModules.home-manager
-        {
-          nixpkgs.overlays = [
-            (final: prev: {
-              unstable = import inputs.nixpkgs-unstable {
-                inherit (prev.stdenv.hostPlatform) system;
-                inherit (prev.config) allowUnfree;
-              };
-            })
-            inputs.obsidian-plugins.overlays.default
-            (final: prev: {
-              obsidianPlugins =
-                prev.obsidianPlugins
-                // {
-                  vim-motions = inputs.obsidian-plugins.lib.mkPlugin prev {
-                    owner = "saberzero1";
-                    repo = "motions";
-                    version = "1.5.1";
-                    hash = "sha256-B04zbE5wyHbHE1/XNfTYs8eT/Pf2u8+nDpzQZKealhc=";
-                  };
+  }: let
+    mkHost = hostName:
+      nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/${hostName}/default.nix
+          {networking.hostName = hostName;}
+          stylix.nixosModules.stylix
+          home-manager.nixosModules.home-manager
+          {
+            nixpkgs.overlays = [
+              (final: prev: {
+                unstable = import inputs.nixpkgs-unstable {
+                  inherit (prev.stdenv.hostPlatform) system;
+                  inherit (prev.config) allowUnfree;
                 };
-            })
-          ];
-        }
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            extraSpecialArgs = {inherit inputs;};
-            sharedModules = [nvf.homeManagerModules.default];
-            users.jbm = ./home.nix;
-          };
-        }
-      ];
+              })
+              inputs.obsidian-plugins.overlays.default
+              (final: prev: {
+                obsidianPlugins =
+                  prev.obsidianPlugins
+                  // {
+                    vim-motions = inputs.obsidian-plugins.lib.mkPlugin prev {
+                      owner = "saberzero1";
+                      repo = "motions";
+                      version = "1.5.1";
+                      hash = "sha256-B04zbE5wyHbHE1/XNfTYs8eT/Pf2u8+nDpzQZKealhc=";
+                    };
+                  };
+              })
+            ];
+          }
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = {inherit inputs;};
+              sharedModules = [nvf.homeManagerModules.default];
+              users.jbm = ./home.nix;
+            };
+          }
+        ];
+      };
+  in {
+    nixosConfigurations = {
+      thinkpad = mkHost "thinkpad";
+      desktop = mkHost "desktop";
     };
   };
 }

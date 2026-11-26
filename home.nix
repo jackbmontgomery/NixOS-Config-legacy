@@ -80,7 +80,6 @@
     };
   };
 
-  # CPU PJRT plugin for diffsol-jax development (prebuilt, from gopjrt releases)
   home.sessionVariables.DIFFSOL_JAX_PJRT_PLUGIN = "${config.home.homeDirectory}/.local/share/pjrt/pjrt_c_api_cpu_plugin.so";
   programs.imv = {
     enable = true;

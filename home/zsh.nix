@@ -2,8 +2,12 @@
   config,
   pkgs,
   lib,
+  osConfig,
   ...
-}: {
+}: let
+  host = osConfig.networking.hostName;
+  flake = "~/NixOS-Config";
+in {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -37,9 +41,9 @@
       trash = "trash-put";
 
       # NixOS
-      nrebuild = "sudo nixos-rebuild switch --flake ~/NixOS-Config#thinkpad";
-      nupdate = "cd ~/NixOS-Config && nix flake update && sudo nixos-rebuild switch --flake ~/NixOS-Config#thinkpad";
-      ncheck = "cd ~/NixOS-Config && nix flake check";
+      nrebuild = "sudo nixos-rebuild switch --flake ${flake}#${host}";
+      nupdate = "cd ${flake} && nix flake update && sudo nixos-rebuild switch --flake ${flake}#${host}";
+      ncheck = "cd ${flake} && nix flake check";
       ngc = "sudo nix-collect-garbage --delete-older-than 7d";
 
       # Git
