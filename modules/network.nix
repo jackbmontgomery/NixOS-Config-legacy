@@ -21,25 +21,25 @@ in {
     ensureProfiles.environmentFiles = ["/etc/nixos/secrets/eduroam.env"];
 
     ensureProfiles.profiles = {
-      eduroam = {
-        connection = {
-          id = "eduroam";
-          type = "wifi";
-        };
-        wifi = {
-          mode = "infrastructure";
-          ssid = "eduroam";
-        };
-        wifi-security = {
-          key-mgmt = "wpa-eap";
-          proto = "rsn;";
-          pairwise = "ccmp;";
-          group = "ccmp;";
-        };
-        "802-1x" = uctEap;
-        ipv4.method = "auto";
-        ipv6.method = "auto";
-      };
+      # eduroam = {
+      #   connection = {
+      #     id = "eduroam";
+      #     type = "wifi";
+      #   };
+      #   wifi = {
+      #     mode = "infrastructure";
+      #     ssid = "eduroam";
+      #   };
+      #   wifi-security = {
+      #     key-mgmt = "wpa-eap";
+      #     proto = "rsn;";
+      #     pairwise = "ccmp;";
+      #     group = "ccmp;";
+      #   };
+      #   "802-1x" = uctEap;
+      #   ipv4.method = "auto";
+      #   ipv6.method = "auto";
+      # };
 
       wired-eduroam = {
         connection = {

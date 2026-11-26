@@ -9,3 +9,4 @@ Login NordPass on Browser
 - Eduroam secret add
 - Vim plugin for Zotero
 - gh auth
+- Tailscale
