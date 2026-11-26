@@ -25,7 +25,6 @@ in {
         connection = {
           id = "eduroam";
           type = "wifi";
-          interface-name = "wlp3s0";
         };
         wifi = {
           mode = "infrastructure";
@@ -66,4 +65,5 @@ in {
     powerOnBoot = true;
   };
   services.blueman.enable = true;
+  services.tailscale.enable = true;
 }

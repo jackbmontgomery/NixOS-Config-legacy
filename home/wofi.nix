@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   stylix.targets.wofi.enable = false;
   programs.wofi = {
     enable = true;
@@ -34,30 +37,30 @@
     };
 
     style = ''
-      #window 
+      #window
       {
           background-color: ${config.lib.stylix.colors.withHashtag.base00};
           border: 20px transparent;
           border-radius: 0px;
       }
-      #outer-box 
+      #outer-box
       {
           padding: 10px;
       }
-      #input 
+      #input
       {
           background-color: ${config.lib.stylix.colors.withHashtag.base01};
           padding: 4px 8px;
       }
-      #inner-box 
+      #inner-box
       {
           margin: 10px;
       }
-      #img 
+      #img
       {
           margin: 20px;
       }
-      #text 
+      #text
       {
           display: none;
           font-size: 0px;
@@ -65,13 +68,13 @@
           padding: 0;
           margin: 0;
       }
-      #entry 
+      #entry
       {
           padding: 1px;
           opacity: 1;
           outline: none;
       }
-      #entry:selected 
+      #entry:selected
       {
           background-color: transparent;
           opacity: 1;

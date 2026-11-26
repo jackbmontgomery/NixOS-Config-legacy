@@ -25,7 +25,7 @@
       base0F = "524f67";
     };
 
-    image = ../wallpapers/contour-line.png;
+    image = ../wallpapers/ANVTM.jpg;
     polarity = "dark";
 
     cursor = {

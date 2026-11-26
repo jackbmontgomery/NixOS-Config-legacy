@@ -3,16 +3,7 @@
   pkgs,
   lib,
   ...
-}: let
-  aphrodite = pkgs.fetchFromGitHub {
-    owner = "win0err";
-    repo = "aphrodite-terminal-theme";
-    rev = "master";
-    hash = "sha256-QGLjuxMIGg4z3/gov9H7/aHCv3tic+9SQuPcguZHB7o=";
-  };
-in {
-  home.file.".oh-my-zsh/custom/themes/aphrodite".source = aphrodite;
-
+}: {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -27,7 +18,7 @@ in {
           owner = "win0err";
           repo = "aphrodite-terminal-theme";
           rev = "master";
-          sha256 = "sha256-QGLjuxMIGg4z3/gov9H7/aHCv3tic+9SQuPcguZHB7o=";
+          sha256 = "sha256-PN/UUvpYNxLDV8xrs4A+OILqhxokbajCMUkIRoQO0oE=";
         };
       }
     ];

@@ -2,32 +2,17 @@
   programs.texlive = {
     enable = true;
     packageSet = pkgs.texlive;
-    extraPackages = tpkgs:
-      with tpkgs; {
-        inherit
-          scheme-medium
-          llncs
-          newtx
-          fontaxes
-          kastrup
-          xstring
-          boondox
-          latexmk
-          wrapfig
-          amsmath
-          ulem
-          hyperref
-          capt-of
-          csquotes
-          graphics
-          isodate
-          fira
-          beamertheme-metropolis
-          pgfplots
-          doublestroke
-          substr
-          ;
-      };
+    extraPackages = tpkgs: {
+      inherit
+        (tpkgs)
+        scheme-medium
+        latexmk
+        beamertheme-metropolis
+        fira
+        biblatex
+        biber
+        ;
+    };
   };
 
   xdg.configFile."latexmk/latexmkrc".text = ''

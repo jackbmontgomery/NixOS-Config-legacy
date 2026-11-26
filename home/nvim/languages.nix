@@ -77,15 +77,10 @@ in {
         enable = true;
         lsp.servers = ["rumdl"];
         format.type = ["rumdl"];
-        extensions.render-markdown-nvim = {
-          enable = true;
-          setupOpts = {
-            latex.enabled = false;
-          };
-        };
       };
       lua.enable = true;
       rust.enable = true;
+      clang.enable = true;
       python = {
         enable = true;
         format.type = ["ruff" "ruff-fix"];
@@ -116,8 +111,8 @@ in {
       })
     '';
     formatter.conform-nvim.setupOpts.formatters.rumdl.append_args = [
-      "--config"
-      ''global.flavor = "obsidian"''
+      # "--config"
+      # ''global.flavor = "obsidian"''
       "--config"
       "MD013.line-length = 80"
       "--config"

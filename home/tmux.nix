@@ -17,7 +17,7 @@ in {
     focusEvents = true;
     keyMode = "vi";
     mouse = true;
-    customPaneNavigationAndResize = true;
+    customPaneNavigationAndResize = false;
     shortcut = "space";
 
     plugins = with pkgs.tmuxPlugins; [
@@ -41,6 +41,10 @@ in {
       # True colour
       set -ga terminal-overrides ",*256col*:Tc"
 
+      # Needed for the terminal to report Ctrl+Shift as a distinct modifier,
+      # which the C-S-hjkl resize binds below depend on.
+      set -s extended-keys on
+
       # General
       set -g set-clipboard on
       set -g detach-on-destroy off
@@ -48,9 +52,6 @@ in {
       set -g allow-passthrough on
       set -g renumber-windows on
 
-      # Status bar layout
-      # absolute-centre keeps the window list from shifting as the embedded
-      # nvim statusline changes width.
       set -g status-justify absolute-centre
 
       set -g status-style bg=default
@@ -74,11 +75,35 @@ in {
       unbind r
       bind r source-file ${config.xdg.configHome}/tmux/tmux.conf \; display "Config reloaded"
 
+      unbind d
+      bind D detach
+
       bind c new-window -c "#{pane_current_path}"
+
+      # Splits open in the current pane's directory.
+      # | and - are mnemonic for the resulting divider; \ and _ are the
+      # unshifted/shifted aliases so either key works without thinking.
+      unbind '"'
+      unbind %
+      bind | split-window -h -c "#{pane_current_path}"
+      bind '\' split-window -h -c "#{pane_current_path}"
+      bind - split-window -v -c "#{pane_current_path}"
+      bind _ split-window -v -c "#{pane_current_path}"
 
       bind j select-window -t 1
       bind k select-window -t 2
       bind l select-window -t 3
+
+      bind -n C-S-h resize-pane -L 5
+      bind -n C-S-j resize-pane -D 5
+      bind -n C-S-k resize-pane -U 5
+      bind -n C-S-l resize-pane -R 5
+
+      bind d run-shell "tmux has-session -t default 2>/dev/null && tmux switch-client -t default || (tmux new-session -ds default -c ~/ && tmux switch-client -t default)"
+
+      bind u run-shell "tmux has-session -t uct 2>/dev/null && tmux switch-client -t uct || (tmux new-session -ds uct -c ~/UCT && tmux switch-client -t uct)"
+
+      bind p run-shell "tmux has-session -t personal 2>/dev/null && tmux switch-client -t personal || (tmux new-session -ds personal -c ~/Personal && tmux switch-client -t personal)"
 
       # Copy mode
       bind-key -T copy-mode-vi 'v' send -X begin-selection

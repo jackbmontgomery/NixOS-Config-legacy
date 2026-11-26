@@ -42,7 +42,6 @@
             ${pkgs.brightnessctl}/bin/brightnessctl set "$step"- >/dev/null
             ;;
     esac
-    br="$(${pkgs.brightnessctl}/bin/brightnessctl -m | ${pkgs.gawk}/bin/awk -F, '{gsub("%","",$4); print $4}')"
   '';
 
   osd-volume = pkgs.writeShellScriptBin "osd-volume" ''
@@ -61,8 +60,6 @@
             ${pkgs.wireplumber}/bin/wpctl set-mute "$sink" toggle
             ;;
     esac
-    state="$(${pkgs.wireplumber}/bin/wpctl get-volume "$sink")"
-    vol="$(${pkgs.gawk}/bin/awk '{printf "%d", $2 * 100}' <<< "$state")"
   '';
 
   lock-screen = pkgs.writeShellScriptBin "lock-screen" ''
@@ -72,57 +69,9 @@
   power-off = pkgs.writeShellScriptBin "power-off" ''
     exec ${pkgs.systemd}/bin/systemctl poweroff
   '';
-  mo = pkgs.writeShellScriptBin "mo" ''
-    set -euo pipefail
-    if [ "$#" -lt 1 ]; then
-        echo "usage: mo <notebook.py>" >&2
-        exit 1
-    fi
-    case "$1" in
-        *.py) ;;
-        *)
-            echo "mo: name must end in .py" >&2
-            exit 1
-            ;;
-    esac
-    file="$(${pkgs.coreutils}/bin/realpath -m "$1")"
-    dir="$(${pkgs.coreutils}/bin/dirname "$file")"
-
-    project=""
-    probe="$dir"
-    while [ "$probe" != "/" ]; do
-        if [ -f "$probe/pyproject.toml" ]; then
-            project="$probe"
-            break
-        fi
-        probe="$(${pkgs.coreutils}/bin/dirname "$probe")"
-    done
-
-    ${pkgs.coreutils}/bin/mkdir -p "$dir"
-    if [ -z "$project" ]; then
-        (cd "$dir" && ${lib.getExe config.programs.uv.package} init --vcs none --bare --quiet)
-        project="$dir"
-        echo "mo: created uv project $project"
-    fi
-    if [ ! -d "$project/.venv" ]; then
-        (cd "$project" && ${lib.getExe config.programs.uv.package} venv --quiet)
-        echo "mo: created $project/.venv"
-    fi
-
-    if [ ! -s "$file" ]; then
-        {
-            ${pkgs.coreutils}/bin/printf -- 'import marimo\n\napp = marimo.App()\n\n\n'
-            ${pkgs.coreutils}/bin/printf -- '@app.cell\ndef _():\n    return\n\n\n'
-            ${pkgs.coreutils}/bin/printf -- 'if __name__ == "__main__":\n    app.run()\n'
-        } > "$file"
-        echo "mo: scaffolded $file"
-    fi
-    exec ${config.programs.vscode.package}/bin/code "$project" "$file"
-  '';
 in {
   home.packages = [
     wofi-open
-    mo
     mic-led-sync
     osd-brightness
     osd-volume

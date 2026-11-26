@@ -25,8 +25,6 @@
     ./home/tmux.nix
     ./home/tex.nix
     ./home/zathura.nix
-    ./home/vscode.nix
-    ./home/pluto.nix
     ./home/julia.nix
     ./home/nvim
   ];
@@ -50,8 +48,40 @@
     pkgs.speedtest-go
     pkgs.rustup
     pkgs.gcc
+    pkgs.cmake
+    pkgs.gnumake
     pkgs.claude-code
+    pkgs.ffmpeg
+    pkgs.presenterm
+    pkgs.pandoc
+    pkgs.typst
   ];
+  xdg = {
+    configFile = {
+      "presenterm/themes/dark-transparent.yaml".source =
+        ./home/presenterm/dark-transparent.yaml;
+
+      "presenterm/themes/light-transparent.yaml".source =
+        ./home/presenterm/light-transparent.yaml;
+
+      "presenterm/config.yaml".text = ''
+        defaults:
+          theme: light-transparent
+          max_columns: 80
+          max_columns_alignment: center
+          max_rows: 20
+          max_rows_alignment: center
+        export:
+          pauses: new_slide
+          dimensions:
+            columns: 80
+            rows: 20
+      '';
+    };
+  };
+
+  # CPU PJRT plugin for diffsol-jax development (prebuilt, from gopjrt releases)
+  home.sessionVariables.DIFFSOL_JAX_PJRT_PLUGIN = "${config.home.homeDirectory}/.local/share/pjrt/pjrt_c_api_cpu_plugin.so";
   programs.imv = {
     enable = true;
     settings = {

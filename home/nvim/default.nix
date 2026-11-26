@@ -6,14 +6,12 @@
 }: {
   imports = [
     ./keymaps.nix
-    # ./iron.nix
-    ./smuggler.nix
+    ./iron.nix
     ./autocmds.nix
     ./notes.nix
     ./languages.nix
     ./utility.nix
     ./statusline.nix
-    # ./compline.nix
   ];
   stylix.targets.neovim.enable = false;
   stylix.targets.nvf.enable = false;
@@ -26,6 +24,9 @@
       clipboard = {
         enable = true;
         registers = "unnamedplus";
+      };
+      globals = {
+        tex_flavor = "latex";
       };
       undoFile.enable = true;
       opts = {
@@ -40,6 +41,7 @@
         conceallevel = 1;
         foldlevel = 99;
         foldenable = true;
+        scrolloff = 8;
       };
       theme = {
         enable = true;
@@ -53,6 +55,26 @@
           enable = true;
           lint_after_save = true;
         };
+      };
+      snippets.luasnip = {
+        enable = true;
+        customSnippets.snipmate.markdown = [
+          {
+            trigger = "end_slide";
+            description = "presenterm slide break";
+            body = "<!-- end_slide -->";
+          }
+          {
+            trigger = "pause";
+            description = "presenterm pause ";
+            body = "<!-- pause -->";
+          }
+          {
+            trigger = "speaker_note";
+            description = "presenterm speaker note";
+            body = "<!-- speaker_note: -->";
+          }
+        ];
       };
       autocomplete = {
         blink-cmp = {
@@ -96,12 +118,6 @@
         tpipeline_restore = 0;
         tpipeline_cursormoved = 0;
       };
-
-      # oil.nvim only registers its "icon" column when an icon provider is
-      # loadable (mini.icons or nvim-web-devicons -- see oil/util.lua
-      # get_icon_provider). Without one, columns = { "icon" } silently renders
-      # nothing. nvim-web-devicons needs no setup ordering, unlike mini.icons,
-      # which gates on _G.MiniIcons being set before oil.setup runs.
       visuals.nvim-web-devicons.enable = true;
 
       ui = {
@@ -127,10 +143,10 @@
             file3 = "<leader>3";
             file4 = "<leader>4";
             listMarks = "<leader>hm";
+            markFile = "<leader>ha";
           };
         };
       };
-      dashboard.dashboard-nvim.enable = true;
     };
   };
 }

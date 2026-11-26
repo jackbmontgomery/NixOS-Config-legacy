@@ -35,6 +35,9 @@
         halign = "center";
         valign = "center";
       };
+      auth = {
+        "fingerprint:enabled" = true;
+      };
     };
   };
 }

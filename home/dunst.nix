@@ -4,6 +4,7 @@
   lib,
   ...
 }: {
+  # Notifications manager. Not found anywhere else
   services.dunst = {
     enable = true;
     package = pkgs.dunst;

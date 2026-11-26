@@ -1,7 +1,5 @@
-# The patched JETLS, as a plain function file rather than a module: two
-# clients need the same derivation and neither should own it -- nvim via
-# home/nvim/languages.nix, and VSCode's Pluto notebook cells via
-# home/pluto.nix. Importing it twice is free; the derivation is identical.
+# JETLS, as a plain function file rather than a module, imported from
+# home/nvim/languages.nix.
 {
   pkgs,
   inputs,
@@ -47,40 +45,11 @@
 # not reuse anything. Measured against a scratch depot: `using JETLS`
 # succeeds and writes no cache files at all.
 let
-  # Not inputs.jetls-nix.packages.<system>.jetls any more: that is this same
-  # package.nix with an unpatched source, and the patch is what lets JETLS
-  # serve Pluto notebooks in VSCode -- see
-  # home/nvim/jetls-pluto-notebook.patch for the one-hunk reason, and
-  # home/pluto.nix for the client side.
-  #
-  # jetls-nix's package.nix hardcodes `src` in a let binding, so there is no
-  # override point for a patched JETLS. Every source it fetches does go
-  # through its `fetchFromGitHub` *argument*, though, and callPackage lets
-  # that argument be replaced. The two kinds of fetch are distinguishable:
-  # JETLS itself arrives by `tag`, while the vendored [sources] packages
-  # (JETLSCore among them, which is the one that holds the notebook module
-  # and the copy that actually gets loaded) arrive by `rev` from the same
-  # repo. All 18 [sources] entries call it with identical args, so this is
-  # one fetch and one applyPatches, reused, each entry then taking its own
-  # subdir from the patched tree.
-  #
-  # julia = pkgs.julia-bin matches what jetls-nix's own flake passes, and
-  # its nixpkgs follows ours, so this is byte-for-byte the upstream build
-  # plus the patch. applyPatches fails the build rather than skipping, so a
-  # jetls-nix bump that moves the hunk is loud.
+  # Equivalent to inputs.jetls-nix.packages.<system>.jetls, built directly
+  # from package.nix instead so julia = pkgs.julia-bin can be passed in --
+  # matching what jetls-nix's own flake passes, with nixpkgs following ours.
   upstream = pkgs.callPackage "${inputs.jetls-nix}/package.nix" {
     julia = pkgs.julia-bin;
-    fetchFromGitHub = args: let
-      fetched = pkgs.fetchFromGitHub args;
-    in
-      if args ? rev
-      then
-        pkgs.applyPatches {
-          name = "JETLS-pluto-notebook-src";
-          src = fetched;
-          patches = [./jetls-pluto-notebook.patch];
-        }
-      else fetched;
   };
 in
   pkgs.runCommand "jetls-${upstream.version}-user-depot" {

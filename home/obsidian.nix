@@ -12,23 +12,13 @@
         alwaysUpdateLinks = true;
         spellcheck = true;
         vimMode = false;
-        # The centered column; the width itself comes from the CSS snippet below.
         readableLineLength = true;
       };
 
-      # Merged with the snippet stylix contributes, not a replacement for it.
       cssSnippets = [
         {
           name = "Line width";
           text = ''
-            /* Readable line length centres the column via margin:auto on
-               .cm-sizer / .markdown-preview-sizer; --file-line-width only sets
-               its max-width, so widening this keeps the centring. Obsidian
-               declares the 700px default on body, and snippets load after
-               app.css, so this wins. 1ch is the width of "0": in a
-               proportional font 100ch comfortably clears prettier's
-               100-character wrap without the column ever being the
-               constraint. */
             body {
               --file-line-width: 100ch;
             }
@@ -38,7 +28,6 @@
 
       appearance = {
         showViewHeader = false;
-        showRibbon = false;
       };
 
       corePlugins = [
@@ -73,24 +62,28 @@
           settings = {
             hideStatus = false;
             hideTabs = true;
-            hideScroll = true;
-            hideSidebarButtons = false;
-            hideTooltips = false;
-            hideFileNavButtons = false;
-            hideSearchSuggestions = false;
-            hideSearchCounts = false;
-            hideInstructions = false;
-            hidePropertiesReading = false;
-            hideVault = false;
+            hideScroll = false;
+            hideSidebarButtons = true;
+            hideTooltips = true;
+            hideFileNavButtons = true;
+            hideSearchSuggestions = true;
+            hideSearchCounts = true;
+            hideInstructions = true;
+            hidePropertiesReading = true;
+            hideVault = true;
           };
         }
-        format-with-prettier
       ];
     };
 
     vaults."Obsidian" = {
       enable = true;
       target = "Obsidian";
+      settings = {
+        appearance = {
+          baseFontSize = 20;
+        };
+      };
     };
   };
 
@@ -100,11 +93,29 @@
     vim.opt.relativenumber = true
     vim.opt.textwidth = 100
     vim.opt.clipboard = "unnamedplus"
+    vim.keymap.set('n', '-', ':Oil<CR>')
+    vim.opt.whichkey = "all"
+
+    vim.keymap.set("n", "j", function()
+        if vim.v.count == 0 then
+            return "gj"
+        else
+            return vim.v.count1 .. "j"
+        end
+    end, { expr = true, silent = true })
+
+    vim.keymap.set("n", "k", function()
+        if vim.v.count == 0 then
+            return "gk"
+        else
+            return vim.v.count1 .. "k"
+        end
+    end, { expr = true, silent = true })
   '';
 
   home.file."Obsidian/prettierrc.json".source = (pkgs.formats.json {}).generate "prettierrc.json" {
     proseWrap = "always";
-    printWidth = 100;
+    printWidth = 120;
     tabWidth = 4;
     useTabs = true;
   };

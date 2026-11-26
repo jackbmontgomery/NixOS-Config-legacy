@@ -15,6 +15,13 @@
       inactive_tab_font_style = "bold";
     };
 
+    keybindings = {
+      "ctrl+shift+h" = "no_op";
+      "ctrl+shift+j" = "no_op";
+      "ctrl+shift+k" = "no_op";
+      "ctrl+shift+l" = "no_op";
+    };
+
     extraConfig = lib.mkAfter ''
       color8 ${config.lib.stylix.colors.withHashtag.base04}
     '';

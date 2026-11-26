@@ -8,9 +8,9 @@
 
     options = {
       synctex = true;
-
       synctex-editor-command = "${lib.getExe pkgs.texlab} inverse-search -i %{input} -l %{line}";
       database = "sqlite";
+      pages-per-row = 1;
     };
   };
 }

@@ -10,6 +10,8 @@
     libraries = with pkgs; [
       stdenv.cc.cc.lib
       zlib
+      libx11
+      wayland
     ];
   };
 }
