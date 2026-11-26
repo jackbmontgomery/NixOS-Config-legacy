@@ -132,6 +132,11 @@
           sensitivity = 0.7,
       })
 
+      hl.device({
+          name = "yichip-jlab-go-keys",
+          kb_options = "altwin:swap_lalt_lwin",
+      })
+
       hl.curve("linear", { type = "bezier", points = { {0, 0}, {1, 1} } })
       hl.curve("snappyReturn", { type = "bezier", points = { {0.4, 0.9}, {0.6, 1.0} } })
       hl.curve("bounce", { type = "bezier", points = { {0.4, 0.9}, {0.6, 1.0} } })
