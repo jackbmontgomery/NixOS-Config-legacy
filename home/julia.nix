@@ -8,6 +8,7 @@
       JULIA_EDITOR = "nvim";
       JULIA_PKG_PRESERVE_TIERED_INSTALLED = "true";
       JULIA_STACKTRACE_ABBREVIATED = "true";
+      PYTHON_JULIAPKG_EXE = "${pkgs.julia-bin}/bin/julia";
     };
 
     file.".julia/config/startup.jl".text = ''

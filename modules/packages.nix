@@ -21,6 +21,7 @@
       wl-clipboard
       vim
       tcpdump
+      networkmanagerapplet # nm-connection-editor: GUI for 802.1X / wifi
       julia-bin
     ];
   };

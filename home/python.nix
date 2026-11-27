@@ -1,6 +1,9 @@
 {pkgs, ...}: {
   home.packages = [
     (pkgs.python3Packages.toPythonApplication pkgs.python3Packages.weasyprint)
+    (pkgs.python3.withPackages (ps: [
+      ps.dbus-python
+    ]))
   ];
 
   programs.uv = {

@@ -12,6 +12,7 @@
       zlib
       libx11
       wayland
+      config.hardware.nvidia.package
     ];
   };
 }

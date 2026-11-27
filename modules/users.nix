@@ -18,4 +18,10 @@
       tree
     ];
   };
+
+  environment.systemPackages = [
+    (pkgs.python3.withPackages (ps: [
+      ps.dbus-python
+    ]))
+  ];
 }
