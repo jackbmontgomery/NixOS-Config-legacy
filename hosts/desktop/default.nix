@@ -6,6 +6,7 @@
     ../../modules/locale.nix
     ../../modules/audio.nix
     ../../modules/hardware.nix
+    ../../modules/nvidia.nix
     ../../modules/users.nix
     ../../modules/packages.nix
     ../../modules/hyprland.nix
